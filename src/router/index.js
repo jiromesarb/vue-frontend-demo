@@ -5,6 +5,7 @@ import VueRouter from 'vue-router'
 import Login from '../views/login.vue'
 import Register from '../views/register.vue'
 import Users from '../views/users.vue'
+import store from './../store'
 
 // initialize Vue router
 Vue.use(VueRouter);
@@ -31,21 +32,22 @@ const routes = [
         path: '/users',
         name: 'users',
         component: Users,
-        // beforeEnter: (to, from, next) => {
-        //     // alert('sad');
-        //     console.log(localStorage.getItem('isLoggedIn'))
-        //     if(localStorage.getItem('isLoggedIn') == true){
-        //         next() // changes route
-        //     }
-        //     else{
-        //         next(false) // doesn't allow changing route, you can also do redirects here etc.
-        //     }
-        // }
+        beforeEnter: (to, from, next) => {
+            let userIsLogged = store.state.isLoggedIn
+
+            if(userIsLogged){
+                next() // changes route
+            }
+            else{
+                next(false) // doesn't allow changing route, you can also do redirects here etc.
+            }
+        }
     }
 ];
 
 const router = new VueRouter({
-    routes
+    routes,
+    store
 })
 
 export default router
